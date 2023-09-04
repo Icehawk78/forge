@@ -135,6 +135,16 @@ public class PlayEffect extends SpellAbilityEffect {
                 cards = Lists.newArrayList(StaticData.instance().getCommonCards().getUniqueCards());
                 final Predicate<PaperCard> cpp = Predicates.compose(CardRulesPredicates.Presets.IS_INSTANT, PaperCard.FN_GET_RULES);
                 cards = Lists.newArrayList(Iterables.filter(cards, cpp));
+            } else if (valid.equalsIgnoreCase("artifact")) {
+                cards = Lists.newArrayList(StaticData.instance().getCommonCards().getUniqueCards());
+                final Predicate<PaperCard> cpp = Predicates.compose(CardRulesPredicates.Presets.IS_INSTANT, PaperCard.FN_GET_RULES);
+                cards = Lists.newArrayList(Iterables.filter(cards, cpp));
+            } else if (valid.equalsIgnoreCase("enchantment")) {
+                cards = Lists.newArrayList(StaticData.instance().getCommonCards().getUniqueCards());
+                final Predicate<PaperCard> cpp = Predicates.compose(CardRulesPredicates.Presets.IS_INSTANT, PaperCard.FN_GET_RULES);
+                cards = Lists.newArrayList(Iterables.filter(cards, cpp));
+            }  else if (valid.equalsIgnoreCase("any")) {
+                cards = Lists.newArrayList(StaticData.instance().getCommonCards().getUniqueCards());
             }
             if (sa.hasParam("RandomCopied")) {
                 final CardCollection choice = new CardCollection();
