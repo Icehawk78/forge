@@ -143,6 +143,9 @@ public class CopyPermanentEffect extends TokenEffectBase {
 
             if (sa.hasParam("ValidSupportedCopy")) {
                 List<PaperCard> cards = Lists.newArrayList(StaticData.instance().getCommonCards().getUniqueCards());
+                if (controller.getRegisteredPlayer().getGameFormat() != null) {
+                    cards = controller.getRegisteredPlayer().getGameFormat().getAllCards();
+                }
                 String valid = sa.getParam("ValidSupportedCopy");
                 if (valid.contains("X")) {
                     valid = TextUtil.fastReplace(valid,

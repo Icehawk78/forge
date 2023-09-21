@@ -159,6 +159,8 @@ public abstract class PreferencesStore<T extends Enum<T>> {
             result.add(GameType.MomirBasic);
         else if (gameType.equals("MoJhoSto"))
             result.add(GameType.MoJhoSto);
+        else if (gameType.equals("MoJhoMod"))
+            result.add(GameType.MoJhoMod);
         else if (gameType.equals("Commander"))
             result.add(GameType.Commander);
         else if (gameType.equals("Oathbreaker"))

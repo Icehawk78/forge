@@ -47992,6 +47992,16 @@ Hand +1, life +0
 {3}, Discard a card: Copy three sorcery cards chosen at random. You may cast one of the copies without paying its mana cost. Activate this ability only any time you could cast a sorcery.
 VAN S
 
+Jhoira of the Ghitu Avatar Enhanced
+Vanguard
+Hand +1, life +0
+{3}, Discard a card: Copy three instant cards chosen at random. You may cast one of the copies without paying its mana cost.
+{3}, Discard a card: Copy three sorcery cards chosen at random. You may cast one of the copies without paying its mana cost. Activate this ability only any time you could cast a sorcery.
+{3}, Discard a card: Copy three enchantment cards chosen at random. You may cast one of the copies without paying its mana cost. Activate this ability only any time you could cast a sorcery.
+{3}, Discard a card: Copy three artifact cards chosen at random. You may cast one of the copies without paying its mana cost. Activate this ability only any time you could cast a sorcery.
+{5}, Discard a card: Copy three cards chosen at random. You may cast one of the copies without paying its mana cost. Activate this ability only any time you could cast a sorcery.
+VAN S
+
 Jhoira's Timebug
 {2}
 Artifact Creature - Insect

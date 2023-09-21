@@ -1587,6 +1587,7 @@ public class AiController {
             return null;
 
         try {
+            Collections.shuffle(all); // jumble up if spells are all equal
             Collections.sort(all, ComputerUtilAbility.saEvaluator); // put best spells first
             ComputerUtilAbility.sortCreatureSpells(all);
         } catch (IllegalArgumentException ex) {

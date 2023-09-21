@@ -52,6 +52,7 @@ S Hanna
 48 S Ink-Eyes, Servant of Oni Avatar
 64 S Jaya Ballard Avatar
 69 S Jhoira of the Ghitu Avatar
+69 S Jhoira of the Ghitu Avatar Enhanced
 S Karn
 34 S Karona, False God Avatar
 87 S Kresh the Bloodbraided Avatar

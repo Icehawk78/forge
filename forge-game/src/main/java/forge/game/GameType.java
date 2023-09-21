@@ -75,6 +75,24 @@ public enum GameType {
                     .getCard("Stonehewer Giant Avatar"), 1);
             return deck;
         }
+    }),
+    MoJhoMod      (DeckFormat.Constructed, false, false, false, "lblMoJhoMod", "lblMoJhoModDesc", new Function<RegisteredPlayer, Deck>() {
+        @Override
+        public Deck apply(RegisteredPlayer player) {
+            Deck deck = new Deck();
+            CardPool mainDeck = deck.getMain();
+            String setcode = Aggregates.random(StaticData.instance().getBlockLands());
+            mainDeck.add("Plains", setcode, 12, true);
+            mainDeck.add("Island", setcode, 12, true);
+            mainDeck.add("Swamp", setcode, 12, true);
+            mainDeck.add("Mountain", setcode, 12, true);
+            mainDeck.add("Forest", setcode, 12, true);
+            deck.getOrCreate(DeckSection.Avatar).add(StaticData.instance().getVariantCards()
+                    .getCard("Momir Vig, Simic Visionary Avatar"), 1);
+            deck.getOrCreate(DeckSection.Avatar).add(StaticData.instance().getVariantCards()
+                    .getCard("Jhoira of the Ghitu Avatar Enhanced"), 1);
+            return deck;
+        }
     });
 
     private final DeckFormat deckFormat;

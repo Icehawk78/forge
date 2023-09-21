@@ -242,6 +242,7 @@ public abstract class GameLobby implements IHasGameType {
             data.appliedVariants.remove(GameType.Brawl);
             data.appliedVariants.remove(GameType.MomirBasic);
             data.appliedVariants.remove(GameType.MoJhoSto);
+            data.appliedVariants.remove(GameType.MoJhoMod);
             break;
         case Oathbreaker:
             data.appliedVariants.remove(GameType.Commander);
@@ -249,6 +250,7 @@ public abstract class GameLobby implements IHasGameType {
             data.appliedVariants.remove(GameType.Brawl);
             data.appliedVariants.remove(GameType.MomirBasic);
             data.appliedVariants.remove(GameType.MoJhoSto);
+            data.appliedVariants.remove(GameType.MoJhoMod);
             break;
         case TinyLeaders:
             data.appliedVariants.remove(GameType.Commander);
@@ -256,6 +258,7 @@ public abstract class GameLobby implements IHasGameType {
             data.appliedVariants.remove(GameType.Brawl);
             data.appliedVariants.remove(GameType.MomirBasic);
             data.appliedVariants.remove(GameType.MoJhoSto);
+            data.appliedVariants.remove(GameType.MoJhoMod);
             break;
         case Brawl:
             data.appliedVariants.remove(GameType.Commander);
@@ -263,10 +266,12 @@ public abstract class GameLobby implements IHasGameType {
             data.appliedVariants.remove(GameType.TinyLeaders);
             data.appliedVariants.remove(GameType.MomirBasic);
             data.appliedVariants.remove(GameType.MoJhoSto);
+            data.appliedVariants.remove(GameType.MoJhoMod);
             break;
         case Vanguard:
             data.appliedVariants.remove(GameType.MomirBasic);
             data.appliedVariants.remove(GameType.MoJhoSto);
+            data.appliedVariants.remove(GameType.MoJhoMod);
             break;
         case MomirBasic:
             data.appliedVariants.remove(GameType.Commander);
@@ -275,6 +280,7 @@ public abstract class GameLobby implements IHasGameType {
             data.appliedVariants.remove(GameType.Brawl);
             data.appliedVariants.remove(GameType.Vanguard);
             data.appliedVariants.remove(GameType.MoJhoSto);
+            data.appliedVariants.remove(GameType.MoJhoMod);
             break;
         case MoJhoSto:
             data.appliedVariants.remove(GameType.Commander);
@@ -283,6 +289,16 @@ public abstract class GameLobby implements IHasGameType {
             data.appliedVariants.remove(GameType.Brawl);
             data.appliedVariants.remove(GameType.Vanguard);
             data.appliedVariants.remove(GameType.MomirBasic);
+            data.appliedVariants.remove(GameType.MoJhoMod);
+            break;
+        case MoJhoMod:
+            data.appliedVariants.remove(GameType.Commander);
+            data.appliedVariants.remove(GameType.Oathbreaker);
+            data.appliedVariants.remove(GameType.TinyLeaders);
+            data.appliedVariants.remove(GameType.Brawl);
+            data.appliedVariants.remove(GameType.Vanguard);
+            data.appliedVariants.remove(GameType.MomirBasic);
+            data.appliedVariants.remove(GameType.MoJhoSto);
             break;
         default:
             break;
@@ -516,7 +532,12 @@ public abstract class GameLobby implements IHasGameType {
                     }
                 }
 
-                rp = RegisteredPlayer.forVariants(activeSlots.size(), variantTypes, deck, schemes, isArchenemy, planes, avatarPool);
+                if (variantTypes.contains(GameType.MoJhoMod)) {
+                    rp = RegisteredPlayer.forVariants(activeSlots.size(), variantTypes, deck, schemes, isArchenemy, planes, avatarPool, FModel.getFormats().getHistoric());
+//                    rp = RegisteredPlayer.forVariants(activeSlots.size(), variantTypes, deck, schemes, isArchenemy, planes, avatarPool);
+                } else {
+                    rp = RegisteredPlayer.forVariants(activeSlots.size(), variantTypes, deck, schemes, isArchenemy, planes, avatarPool);
+                }
                 rp.setTeamNumber(team);
                 players.add(rp.setPlayer(lobbyPlayer));
             }

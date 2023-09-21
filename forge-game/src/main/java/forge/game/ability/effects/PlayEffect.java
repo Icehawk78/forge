@@ -127,24 +127,28 @@ public class PlayEffect extends SpellAbilityEffect {
                     name = name.replace(";", ",");
                     cards.add(StaticData.instance().getCommonCards().getUniqueByName(name));
                 }
-            } else if (valid.equalsIgnoreCase("sorcery")) {
-                cards = Lists.newArrayList(StaticData.instance().getCommonCards().getUniqueCards());
-                final Predicate<PaperCard> cpp = Predicates.compose(CardRulesPredicates.Presets.IS_SORCERY, PaperCard.FN_GET_RULES);
-                cards = Lists.newArrayList(Iterables.filter(cards, cpp));
-            } else if (valid.equalsIgnoreCase("instant")) {
-                cards = Lists.newArrayList(StaticData.instance().getCommonCards().getUniqueCards());
-                final Predicate<PaperCard> cpp = Predicates.compose(CardRulesPredicates.Presets.IS_INSTANT, PaperCard.FN_GET_RULES);
-                cards = Lists.newArrayList(Iterables.filter(cards, cpp));
-            } else if (valid.equalsIgnoreCase("artifact")) {
-                cards = Lists.newArrayList(StaticData.instance().getCommonCards().getUniqueCards());
-                final Predicate<PaperCard> cpp = Predicates.compose(CardRulesPredicates.Presets.IS_INSTANT, PaperCard.FN_GET_RULES);
-                cards = Lists.newArrayList(Iterables.filter(cards, cpp));
-            } else if (valid.equalsIgnoreCase("enchantment")) {
-                cards = Lists.newArrayList(StaticData.instance().getCommonCards().getUniqueCards());
-                final Predicate<PaperCard> cpp = Predicates.compose(CardRulesPredicates.Presets.IS_INSTANT, PaperCard.FN_GET_RULES);
-                cards = Lists.newArrayList(Iterables.filter(cards, cpp));
-            }  else if (valid.equalsIgnoreCase("any")) {
-                cards = Lists.newArrayList(StaticData.instance().getCommonCards().getUniqueCards());
+            } else {
+                if (controller.getRegisteredPlayer().getGameFormat() == null) {
+                    cards = Lists.newArrayList(StaticData.instance().getCommonCards().getUniqueCards());
+                } else {
+                    cards = controller.getRegisteredPlayer().getGameFormat().getAllCards();
+                }
+                if (valid.equalsIgnoreCase("sorcery")) {
+                    final Predicate<PaperCard> cpp = Predicates.compose(CardRulesPredicates.Presets.IS_SORCERY, PaperCard.FN_GET_RULES);
+                    cards = Lists.newArrayList(Iterables.filter(cards, cpp));
+                } else if (valid.equalsIgnoreCase("instant")) {
+                    final Predicate<PaperCard> cpp = Predicates.compose(CardRulesPredicates.Presets.IS_INSTANT, PaperCard.FN_GET_RULES);
+                    cards = Lists.newArrayList(Iterables.filter(cards, cpp));
+                } else if (valid.equalsIgnoreCase("artifact")) {
+                    final Predicate<PaperCard> cpp = Predicates.compose(CardRulesPredicates.Presets.IS_ARTIFACT, PaperCard.FN_GET_RULES);
+                    cards = Lists.newArrayList(Iterables.filter(cards, cpp));
+                } else if (valid.equalsIgnoreCase("enchantment")) {
+                    final Predicate<PaperCard> cpp = Predicates.compose(CardRulesPredicates.Presets.IS_ENCHANTMENT, PaperCard.FN_GET_RULES);
+                    cards = Lists.newArrayList(Iterables.filter(cards, cpp));
+                }  else if (valid.equalsIgnoreCase("nonland")) {
+                    final Predicate<PaperCard> cpp = Predicates.compose(CardRulesPredicates.Presets.IS_NON_LAND, PaperCard.FN_GET_RULES);
+                    cards = Lists.newArrayList(Iterables.filter(cards, cpp));
+                }
             }
             if (sa.hasParam("RandomCopied")) {
                 final CardCollection choice = new CardCollection();

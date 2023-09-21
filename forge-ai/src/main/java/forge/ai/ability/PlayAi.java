@@ -53,6 +53,29 @@ public class PlayAi extends SpellAbilityAi {
             if ("Instant".equals(sa.getParam("AnySupportedCard")) && MyRandom.percentTrue(chanceToActivateInst)) {
                 return false;
             }
+
+            return true;
+        }
+
+        if (game.getRules().hasAppliedVariant(GameType.MoJhoMod) && source.getName().equals("Jhoira of the Ghitu Avatar Enhanced")) {
+            // Additional logic for MoJhoSto:
+            // Do not activate Jhoira too early, usually there are few good targets
+            AiController aic = ((PlayerControllerAi)ai.getController()).getAi();
+            int numLandsForJhoira = aic.getIntProperty(AiProps.MOJHOSTO_NUM_LANDS_TO_ACTIVATE_JHOIRA);
+            int chanceToActivateInst = 100 - aic.getIntProperty(AiProps.MOJHOSTO_CHANCE_TO_USE_JHOIRA_COPY_INSTANT);
+            int chanceToActivateNonland = 100 - aic.getIntProperty(AiProps.MOJHOMOD_CHANCE_TO_USE_JHOIRA_NONLAND);
+            if (ai.getLandsInPlay().size() < numLandsForJhoira) {
+                return false;
+            }
+//            System.out.println("Jhoira Enhanced Evaluation: " + sa.getParam("AnySupportedCard"));
+            // Don't spam activate the Instant copying ability all the time to give the AI a chance to use other abilities
+            // Can probably be improved, but as random as MoJhoSto already is, probably not a huge deal for now
+            if ("Instant".equals(sa.getParam("AnySupportedCard")) && MyRandom.percentTrue(chanceToActivateInst)) {
+                return false;
+            }
+            if ("Nonland".equals(sa.getParam("AnySupportedCard")) && MyRandom.percentTrue(chanceToActivateNonland)) {
+                return false;
+            }
             return true;
         }
 

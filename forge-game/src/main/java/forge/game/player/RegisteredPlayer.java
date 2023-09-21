@@ -12,6 +12,7 @@ import forge.LobbyPlayer;
 import forge.deck.CardPool;
 import forge.deck.Deck;
 import forge.deck.DeckSection;
+import forge.game.GameFormat;
 import forge.game.GameType;
 import forge.item.IPaperCard;
 import forge.item.PaperCard;
@@ -39,6 +40,7 @@ public class RegisteredPlayer {
     private int teamNumber = -1; // members of teams with negative id will play FFA.
     private boolean randomFoil = false;
     private boolean enableETBCountersEffect = false;
+    private GameFormat gameFormat = null;
     
     public RegisteredPlayer(Deck deck0) {
         originalDeck = deck0;
@@ -174,10 +176,21 @@ public class RegisteredPlayer {
             start.planes = planes;
     	}
         if (appliedVariants.contains(GameType.Vanguard) || appliedVariants.contains(GameType.MomirBasic)
-                || appliedVariants.contains(GameType.MoJhoSto)) { //fix the crash, if somehow the avatar is null, get it directly from the deck
+                || appliedVariants.contains(GameType.MoJhoSto) || appliedVariants.contains(GameType.MoJhoMod)) { //fix the crash, if somehow the avatar is null, get it directly from the deck
             start.setVanguardAvatars(vanguardAvatar == null ? deck.get(DeckSection.Avatar).toFlatList() : vanguardAvatar.toFlatList());
         }
     	return start;
+    }
+
+    public static RegisteredPlayer forVariants(final int playerCount,
+                                               final Set<GameType> appliedVariants, final Deck deck,	              //General vars
+                                               final Iterable<PaperCard> schemes, final boolean playerIsArchenemy,   //Archenemy specific vars
+                                               final Iterable<PaperCard> planes, final CardPool vanguardAvatar,
+                                               final GameFormat gameFormat) {
+        RegisteredPlayer start = forVariants(playerCount, appliedVariants, deck, schemes, playerIsArchenemy, planes, vanguardAvatar);
+        start.setGameFormat(gameFormat);
+
+        return start;
     }
 
     public LobbyPlayer getPlayer() {
@@ -232,5 +245,13 @@ public class RegisteredPlayer {
     }
     public void setRandomFoil(boolean useRandomFoil) {
         randomFoil = useRandomFoil;
+    }
+
+    public GameFormat getGameFormat() {
+        return gameFormat;
+    }
+
+    public void setGameFormat(GameFormat gameFormat) {
+        this.gameFormat = gameFormat;
     }
 }

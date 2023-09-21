@@ -1068,13 +1068,12 @@ public class SpecialCardAi {
                 return false;
             }
 
+            AiController aic = ((PlayerControllerAi)ai.getController()).getAi();
+            int numLandsForJhoira = aic.getIntProperty(AiProps.MOJHOSTO_NUM_LANDS_TO_ACTIVATE_JHOIRA);
             // In MoJhoSto, prefer Jhoira sorcery ability from time to time
             if (source.getGame().getRules().hasAppliedVariant(GameType.MoJhoSto)
                     && CardLists.filter(ai.getLandsInPlay(), CardPredicates.Presets.UNTAPPED).size() >= 3) {
-                AiController aic = ((PlayerControllerAi)ai.getController()).getAi();
                 int chanceToPrefJhoira = aic.getIntProperty(AiProps.MOJHOSTO_CHANCE_TO_PREFER_JHOIRA_OVER_MOMIR);
-                int numLandsForJhoira = aic.getIntProperty(AiProps.MOJHOSTO_NUM_LANDS_TO_ACTIVATE_JHOIRA);
-
                 if (ai.getLandsInPlay().size() >= numLandsForJhoira && MyRandom.percentTrue(chanceToPrefJhoira)) {
                     return false;
                 }
@@ -1084,12 +1083,18 @@ public class SpecialCardAi {
             int tokenSize = ComputerUtilCost.getMaxXValue(sa, ai, false);
 
             // Some basic strategy for Momir
-            if (tokenSize < 2) {
+            int smallMomirChance = 100 - aic.getIntProperty(AiProps.MOJHOMOD_CHANCE_TO_USE_MOMIR_LT_2);
+            if (tokenSize < 2 && MyRandom.percentTrue(smallMomirChance)) {
                 return false;
             }
 
             if (tokenSize > 11) {
                 tokenSize = 11;
+            }
+
+            int leftoverMomirManaChance = 100 - aic.getIntProperty(AiProps.MOJHOMOD_CHANCE_TO_LEAVE_MOMIR_MANA);
+            if (tokenSize > numLandsForJhoira && MyRandom.percentTrue(leftoverMomirManaChance)) {
+                tokenSize = Math.max(2, tokenSize - (3 + MyRandom.getRandom().nextInt(3)));
             }
 
             sa.setXManaCostPaid(tokenSize);

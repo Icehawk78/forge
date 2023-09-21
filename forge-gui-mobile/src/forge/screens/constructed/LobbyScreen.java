@@ -143,6 +143,7 @@ public abstract class LobbyScreen extends LaunchScreen implements ILobbyView {
         cbVariants.addItem(GameType.Vanguard);
         cbVariants.addItem(GameType.MomirBasic);
         cbVariants.addItem(GameType.MoJhoSto);
+        cbVariants.addItem(GameType.MoJhoMod);
         cbVariants.addItem(GameType.Commander);
         cbVariants.addItem(GameType.Oathbreaker);
         cbVariants.addItem(GameType.TinyLeaders);
@@ -451,6 +452,7 @@ public abstract class LobbyScreen extends LaunchScreen implements ILobbyView {
             lstVariants.addItem(new Variant(GameType.Vanguard));
             lstVariants.addItem(new Variant(GameType.MomirBasic));
             lstVariants.addItem(new Variant(GameType.MoJhoSto));
+            lstVariants.addItem(new Variant(GameType.MoJhoMod));
             lstVariants.addItem(new Variant(GameType.Commander));
             lstVariants.addItem(new Variant(GameType.Oathbreaker));
             lstVariants.addItem(new Variant(GameType.TinyLeaders));
