@@ -1164,6 +1164,9 @@ public class AbilityUtils {
             players.addAll(game.getPlayersInTurnOrder());
             players.removeAll(getDefinedPlayers(card, defined.substring(3), sa));
         }
+        else if (defined.equals("Registered")) {
+            players.addAll(game.getRegisteredPlayers());
+        }
         else if (defined.equals("EnchantedPlayer")) {
             final Object o = sa.getHostCard().getEntityAttachedTo();
             if (o instanceof Player) {
@@ -1691,7 +1694,7 @@ public class AbilityUtils {
                     SpellAbility root = sa.getRootAbility();
 
                     // 107.3i If an object gains an ability, the value of X within that ability is the value defined by that ability,
-                    // or 0 if that ability doesn’t define a value of X. This is an exception to rule 107.3h. This may occur with ability-adding effects, text-changing effects, or copy effects.
+                    // or 0 if that ability doesn't define a value of X. This is an exception to rule 107.3h. This may occur with ability-adding effects, text-changing effects, or copy effects.
                     if (root.getXManaCostPaid() != null) {
                         return doXMath(root.getXManaCostPaid(), expr, c, ctb);
                     }
@@ -2359,7 +2362,7 @@ public class AbilityUtils {
             String[] props = l[0].split(" ");
             Boolean isCombat = null;
             if (sq[0].contains("CombatDamage")) {
-                isCombat = true;
+                isCombat = !sq[0].contains("Non");
             }
             int num;
             List<Integer> dmgInstances = game.getDamageDoneThisTurn(isCombat, false, props[1], props[2], c, player, ctb);
