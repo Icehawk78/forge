@@ -533,7 +533,7 @@ public abstract class GameLobby implements IHasGameType {
                 }
 
                 if (variantTypes.contains(GameType.MoJhoMod)) {
-                    rp = RegisteredPlayer.forVariants(activeSlots.size(), variantTypes, deck, schemes, isArchenemy, planes, avatarPool, FModel.getFormats().getHistoric());
+                    rp = RegisteredPlayer.forVariants(activeSlots.size(), variantTypes, deck, schemes, isArchenemy, planes, avatarPool, FModel.getFormats().getFormat("Funky"));
 //                    rp = RegisteredPlayer.forVariants(activeSlots.size(), variantTypes, deck, schemes, isArchenemy, planes, avatarPool);
                 } else {
                     rp = RegisteredPlayer.forVariants(activeSlots.size(), variantTypes, deck, schemes, isArchenemy, planes, avatarPool);

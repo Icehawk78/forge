@@ -149,6 +149,11 @@ public class PlayEffect extends SpellAbilityEffect {
                     final Predicate<PaperCard> cpp = Predicates.compose(CardRulesPredicates.Presets.IS_NON_LAND, PaperCard.FN_GET_RULES);
                     cards = Lists.newArrayList(Iterables.filter(cards, cpp));
                 }
+//                int totalCmc = 0;
+//                for (PaperCard card : cards) {
+//                    totalCmc += card.getRules().getManaCost().getCMC();
+//                }
+//                System.out.println(valid + ": " + (totalCmc / cards.size()));
             }
             if (sa.hasParam("RandomCopied")) {
                 final CardCollection choice = new CardCollection();

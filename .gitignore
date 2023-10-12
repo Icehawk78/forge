@@ -84,3 +84,6 @@ forge-gui/tools/PerSetTrackingResults
 *.tiled-session
 /forge-gui/res/adventure/*.tiled-project
 /forge-gui/res/adventure/*.tiled-session
+
+# Ignore mvn folders
+**/.mvn
