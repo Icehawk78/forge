@@ -107,6 +107,7 @@ public enum VSubmenuPreferences implements IVSubmenu<CSubmenuPreferences> {
     private final JCheckBox cbCompactPrompt = new OptionsCheckBox(localizer.getMessage("cbCompactPrompt"));
     private final JCheckBox cbEscapeEndsTurn = new OptionsCheckBox(localizer.getMessage("cbEscapeEndsTurn"));
     private final JCheckBox cbPreselectPrevAbOrder = new OptionsCheckBox(localizer.getMessage("cbPreselectPrevAbOrder"));
+    private final JCheckBox cbRememberReplacementOrder = new OptionsCheckBox(localizer.getMessage("cbRememberReplacementOrder"));
     private final JCheckBox cbHideReminderText = new OptionsCheckBox(localizer.getMessage("cbHideReminderText"));
     private final JCheckBox cbCardTextUseSansSerif = new OptionsCheckBox(localizer.getMessage("cbCardTextUseSansSerif"));
     private final JCheckBox cbCardTextHideReminder = new OptionsCheckBox(localizer.getMessage("cbCardTextHideReminder"));
@@ -297,6 +298,9 @@ public enum VSubmenuPreferences implements IVSubmenu<CSubmenuPreferences> {
 
         pnlPrefs.add(cbPreselectPrevAbOrder, titleConstraints);
         pnlPrefs.add(new NoteLabel(localizer.getMessage("nlPreselectPrevAbOrder")), descriptionConstraints);
+
+        pnlPrefs.add(cbRememberReplacementOrder, titleConstraints);
+        pnlPrefs.add(new NoteLabel(localizer.getMessage("nlRememberReplacementOrder")), descriptionConstraints);
 
         pnlPrefs.add(cbpGraveyardOrdering, comboBoxConstraints);
         pnlPrefs.add(new NoteLabel(localizer.getMessage("nlpGraveyardOrdering")), descriptionConstraints);
@@ -1049,6 +1053,10 @@ public enum VSubmenuPreferences implements IVSubmenu<CSubmenuPreferences> {
 
     public final JCheckBox getCbPreselectPrevAbOrder() {
         return cbPreselectPrevAbOrder;
+    }
+
+    public final JCheckBox getCbRememberReplacementOrder() {
+        return cbRememberReplacementOrder;
     }
 
     public final JCheckBox getCbAiPicker() {

@@ -252,6 +252,9 @@ public class SettingsPage extends TabPage<SettingsScreen> {
         lstSettings.addItem(new BooleanSetting(FPref.UI_PRESELECT_PREVIOUS_ABILITY_ORDER,
             Forge.getLocalizer().getMessage("cbPreselectPrevAbOrder"),
             Forge.getLocalizer().getMessage("nlPreselectPrevAbOrder")), 1);
+        lstSettings.addItem(new BooleanSetting(FPref.UI_REMEMBER_REPLACEMENT_ORDER,
+            Forge.getLocalizer().getMessage("cbRememberReplacementOrder"),
+            Forge.getLocalizer().getMessage("nlRememberReplacementOrder")), 1);
         lstSettings.addItem(new CustomSelectSetting(FPref.UI_ALLOW_ORDER_GRAVEYARD_WHEN_NEEDED,
             Forge.getLocalizer().getMessage("lblOrderGraveyard"),
             Forge.getLocalizer().getMessage("nlOrderGraveyard"),

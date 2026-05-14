@@ -1894,13 +1894,43 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
         final List<String> res = possibleReplacers.stream().map(ReplacementEffect::toString).collect(Collectors.toList());
         final String firstStr = res.get(0);
         final String prompt = localizer.getMessage("lblChooseFirstApplyReplacementEffect");
+
+        // If the player has opted in, look up a previously remembered choice for this exact menu.
+        // The canonical key combines the event type with the sorted set of effect descriptions, so
+        // the remembered choice transfers between situations whose menu of replacement effects is
+        // functionally identical (same effects on the same kind of event). If a remembered value
+        // no longer matches any current option (e.g. a card text edit invalidated it), fall through
+        // to the prompt as if no memory existed.
+        final boolean rememberOrder = FModel.getPreferences().getPrefBoolean(FPref.UI_REMEMBER_REPLACEMENT_ORDER);
+        String menuKey = null;
+        if (rememberOrder) {
+            final List<String> sorted = new ArrayList<>(res);
+            Collections.sort(sorted);
+            menuKey = first.getMode().name() + ":" + String.join("|", sorted);
+            final String remembered = PersistentReplacementOrderStore.get().getChosen(menuKey);
+            if (remembered != null) {
+                for (ReplacementEffect re : possibleReplacers) {
+                    if (remembered.equals(re.toString())) {
+                        return re;
+                    }
+                }
+            }
+        }
+
         for (int i = 1; i < res.size(); i++) {
             // prompt user if there are multiple different options
             if (!res.get(i).equals(firstStr)) {
-                if (!GuiBase.isNetPlay(getGui())) //non network game don't need serialization
-                    return getGui().one(prompt, possibleReplacers);
-                ReplacementEffectView rev = getGui().one(prompt, possibleReplacers.stream().map(ReplacementEffect::getView).collect(Collectors.toList()));
-                return possibleReplacers.stream().filter(re -> re.getId() == rev.getId()).findAny().orElse(first);
+                final ReplacementEffect chosen;
+                if (!GuiBase.isNetPlay(getGui())) { //non network game don't need serialization
+                    chosen = getGui().one(prompt, possibleReplacers);
+                } else {
+                    ReplacementEffectView rev = getGui().one(prompt, possibleReplacers.stream().map(ReplacementEffect::getView).collect(Collectors.toList()));
+                    chosen = possibleReplacers.stream().filter(re -> re.getId() == rev.getId()).findAny().orElse(first);
+                }
+                if (rememberOrder && menuKey != null && chosen != null) {
+                    PersistentReplacementOrderStore.get().setChosen(menuKey, chosen.toString());
+                }
+                return chosen;
             }
         }
         // return first option without prompting if all options are the same
