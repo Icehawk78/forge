@@ -646,16 +646,38 @@ public class DeckgenUtil {
 
     /** Generate a 2-5-color Commander deck. */
     public static Deck generateCommanderDeck(boolean forAi, GameType gameType) {
-        // Get random multicolor Legendary creature
+        return generateCommanderDeck(forAi, gameType, null);
+    }
+
+    /**
+     * Generate a Commander deck whose commander matches the given color identity.
+     * If {@code colorIdentity} is null, any legal commander may be chosen (same as the unfiltered overload).
+     * If no commander matches the requested identity, falls back to an unfiltered pick.
+     */
+    public static Deck generateCommanderDeck(boolean forAi, GameType gameType, ColorSet colorIdentity) {
         final DeckFormat format = gameType.getDeckFormat();
         Predicate<CardRules> canPlay = forAi ? DeckGeneratorBase.AI_CAN_PLAY : CardRulesPredicates.IS_KEPT_IN_RANDOM_DECKS;
 
-        PaperCard commander = FModel.getMagicDb().getCommonCards().streamAllCards()
-                .filter(format.isLegalCardPredicate())
-                .filter(format.isLegalCommanderPredicate())
-                .filter(PaperCardPredicates.fromRules(canPlay))
-                .collect(StreamUtil.random()).get();
-        return generateRandomCommanderDeck(commander, format, forAi, false);
+        Predicate<PaperCard> commanderFilter = format.isLegalCardPredicate()
+                .and(format.isLegalCommanderPredicate())
+                .and(PaperCardPredicates.fromRules(canPlay));
+        if (colorIdentity != null) {
+            final byte targetMask = colorIdentity.getColor();
+            commanderFilter = commanderFilter.and(card -> card.getRules().getColorIdentity().getColor() == targetMask);
+        }
+
+        Optional<PaperCard> picked = FModel.getMagicDb().getCommonCards().streamAllCards()
+                .filter(commanderFilter)
+                .collect(StreamUtil.random());
+        if (!picked.isPresent() && colorIdentity != null) {
+            // Fallback: no commander matched the requested identity; pick any legal commander.
+            picked = FModel.getMagicDb().getCommonCards().streamAllCards()
+                    .filter(format.isLegalCardPredicate())
+                    .filter(format.isLegalCommanderPredicate())
+                    .filter(PaperCardPredicates.fromRules(canPlay))
+                    .collect(StreamUtil.random());
+        }
+        return generateRandomCommanderDeck(picked.get(), format, forAi, false);
     }
 
     /** Generate a ramdom Commander deck. */

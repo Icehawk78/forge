@@ -256,6 +256,42 @@ public class Config {
         return configData.starterEditions;
     }
 
+    /**
+     * Canonical Magic color-identity ordering for the Chaos-commander picker, parallel to picker
+     * indices 1..32 (picker index 0 is "Random Deck"). Ordering rules:
+     *   - sort by size bucket ascending: colorless, mono, 2-color, 3-color, 4-color, 5-color;
+     *   - within a bucket, list combinations in canonical "minimize jumps; jump as late as possible;
+     *     then WUBRG-first" order;
+     *   - each entry's letters follow the same rules so e.g. Abzan is "GWB" (enemy color last),
+     *     and the missing-color 4c sequences (nephilim) start at the color clockwise after the gap.
+     * Empty string = colorless. Use {@link #getChaosCommanderColorIdentity(int)} to decode.
+     */
+    public static final String[] CHAOS_COMMANDER_COLOR_LETTERS = {
+            "",                                                                 // colorless
+            "W", "U", "B", "R", "G",                                            // mono
+            "WU", "WB", "UB", "UR", "BR", "BG", "RG", "RW", "GW", "GU",         // 2c
+            "WUB", "UBR", "BRG", "RGW", "GWU",                                  // shards (0 jumps)
+            "WUR", "UBG", "BRW", "RGU", "GWB",                                  // wedges (1 jump, enemy last)
+            "WUBR", "UBRG", "BRGW", "RGWU", "GWUB",                             // 4-color "nephilim"
+            "WUBRG"                                                             // 5-color
+    };
+
+    /**
+     * Returns the {@link ColorSet} matching the chaos-commander picker selection.
+     * Picker index 0 ("Random Deck") returns null (no filter); 1..32 map to
+     * {@link #CHAOS_COMMANDER_COLOR_LETTERS} entries; out-of-range returns null.
+     */
+    public static ColorSet getChaosCommanderColorIdentity(int pickerIndex) {
+        if (pickerIndex <= 0 || pickerIndex > CHAOS_COMMANDER_COLOR_LETTERS.length) {
+            return null;
+        }
+        String letters = CHAOS_COMMANDER_COLOR_LETTERS[pickerIndex - 1];
+        if (letters.isEmpty()) {
+            return ColorSet.fromMask(0); // colorless
+        }
+        return ColorSet.fromNames(letters.toCharArray());
+    }
+
     public Deck starterDeck(ColorSet color, DifficultyData difficultyData, AdventureModes mode, int index, CardEdition starterEdition) {
         switch (mode) {
             case Constructed:
@@ -284,7 +320,10 @@ public class Config {
                 }
             case Chaos:
                 if ("Commander".equalsIgnoreCase(configData.chaosDeckFormat)) {
-                    return DeckgenUtil.generateCommanderDeck(false, GameType.Commander);
+                    // Picker index 0 is "Random Deck"; indices 1..CHAOS_COMMANDER_COLOR_LETTERS.length
+                    // map to a specific color identity bucket (see canonical-order array below).
+                    return DeckgenUtil.generateCommanderDeck(false, GameType.Commander,
+                            getChaosCommanderColorIdentity(index));
                 }
                 return DeckgenUtil.getRandomOrPreconOrThemeDeck("", false, false, false, configData.allowedEditions);
             case Custom:

@@ -137,7 +137,7 @@ public class NewGameScene extends MenuScene {
 
         modes.add(AdventureModes.Chaos);
         AdventureModes.Chaos.setSelectionName(deckLabel);
-        AdventureModes.Chaos.setModes(new Array<>(new String[]{Forge.getLocalizer().getMessage("lblRandomDeck")}));
+        AdventureModes.Chaos.setModes(buildChaosModeOptions());
         for (DeckProxy deckProxy : DeckProxy.getAllCustomStarterDecks())
             custom.add(deckProxy.getName());
         if (!custom.isEmpty()) {
@@ -310,6 +310,35 @@ public class NewGameScene extends MenuScene {
         }
         int idx = colorId.getCurrentIndex();
         return colorIds[idx < colorIds.length ? idx : 0];
+    }
+
+    /**
+     * Builds the option list for the Chaos mode color picker.
+     * When chaosDeckFormat is Commander, the first option is "Random Deck" (any commander)
+     * followed by all 32 color identity buckets in canonical Magic ordering (size buckets
+     * ascending; within each bucket, jumps minimized then jumps as late as possible; wedges
+     * end with their shared enemy color). The canonical letter sequence per index is sourced
+     * from {@link Config#CHAOS_COMMANDER_COLOR_LETTERS} so the picker and the deck generator
+     * stay in lockstep. For other chaos formats, only "Random Deck" is offered.
+     */
+    private Array<String> buildChaosModeOptions() {
+        Array<String> options = new Array<>();
+        options.add(Forge.getLocalizer().getMessage("lblRandomDeck"));
+        if (!"Commander".equalsIgnoreCase(Config.instance().getConfigData().chaosDeckFormat)) {
+            return options;
+        }
+        for (String letters : Config.CHAOS_COMMANDER_COLOR_LETTERS) {
+            // Colorless is the empty-letters entry; render it as the [+C] mana symbol
+            // to match how Controls.colorIdToString does it. Other entries render each
+            // letter in its canonical position as a Forge mana-symbol code.
+            String renderable = letters.isEmpty() ? "C" : letters;
+            StringBuilder label = new StringBuilder(renderable.length() * 4);
+            for (int i = 0; i < renderable.length(); i++) {
+                label.append("[+").append(renderable.charAt(i)).append(']');
+            }
+            options.add(label.toString());
+        }
+        return options;
     }
 
     private CardEdition getStartingEdition() {
